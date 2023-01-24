@@ -4,30 +4,28 @@ using UnityEngine;
 
 public class MoveLeftX : MonoBehaviour
 {
-    public float speed;
-    private PlayerControllerX playerControllerScript;
-    private float leftBound = -10;
+    public float speed = 15f;
+    public float leftBound;
 
-    // Start is called before the first frame update
-    void Start()
+    private PlayerControllerX playerControllerScript;
+
+    private void Start()
     {
-        playerControllerScript = GameObject.Find("Player").GetComponent<PlayerControllerX>();
+        playerControllerScript = FindObjectOfType<PlayerControllerX>();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    // hará que el obstaculo se mueva hacia la izquierda
+    private void Update()
     {
-        // If game is not over, move to the left
-        if (playerControllerScript.gameOver)
+        if (!playerControllerScript.gameOver)
         {
-            transform.Translate(Vector3.left * speed * Time.deltaTime, Space.World);
+            transform.Translate(Vector3.left * Time.deltaTime * speed);
         }
 
-        // If object goes off screen that is NOT the background, destroy it
         if (transform.position.x < leftBound && !gameObject.CompareTag("Background"))
         {
             Destroy(gameObject);
         }
-
     }
 }
