@@ -4,35 +4,31 @@ using UnityEngine;
 
 public class SpawnManagerX : MonoBehaviour
 {
-    public GameObject[] obstaclePrefabs;
+    public GameObject[] objectPrefabs;
+    private float spawnDelay = 2;
+    private float spawnInterval = 1.5f;
 
-    private float startDelay = 2f;
-    private float respawnDelay = 2f;
+    private PlayerControllerX playerControllerScript;
 
-    private PlayerControllerX playerControllerXScript;
-
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-
-        // creará un obstaculo cada 2 segundos
-        InvokeRepeating("SpawnObstacle", startDelay, respawnDelay);
-
-        playerControllerXScript = FindObjectOfType<PlayerControllerX>();
+        InvokeRepeating("PrawnsObject", spawnDelay, spawnInterval);
+        playerControllerScript = GameObject.Find("Player").GetComponent<PlayerControllerX>();
     }
 
-    // spawneará el obstaculo
-    private void SpawnObstacle()
+    // Spawn obstacles
+    void SpawnObjects ()
     {
-        int randomIdx = Random.Range(0, obstaclePrefabs.Length);
-        Instantiate(obstaclePrefabs[randomIdx], new Vector3(25,Random.Range(3f,15f),0), obstaclePrefabs[randomIdx].transform.rotation);
-    }
+        // Set random spawn location and random object index
+        Vector3 spawnLocation = new Vector3(30, Random.Range(5, 15), 0);
+        int index = Random.Range(0, objectPrefabs.Length);
 
-    private void Update()
-    {
-        if (playerControllerXScript.gameOver)
+        // If game is still active, spawn new object
+        if (!playerControllerScript.gameOver)
         {
-            CancelInvoke("SpawnObstacle");
+            Instantiate(objectPrefabs[index], spawnLocation, objectPrefabs[index].transform.rotation);
         }
+
     }
 }
-
